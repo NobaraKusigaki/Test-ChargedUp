@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.Auto.*;
 
 
 public class Robot extends TimedRobot {
@@ -17,6 +18,7 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private Joystick joy;
     private DriveSubsystem subDrive;
+    private AutoAling autoAling;
 
 
     @Override
@@ -25,9 +27,9 @@ public class Robot extends TimedRobot {
         subDrive = new DriveSubsystem();
         robotContainer = new RobotContainer();
         joy = new Joystick(0);
+        autoAling = new AutoAling(subDrive);
 
         // autonomousCommand = robotContainer.getAutonomousCommand();
-
     }
 
 
@@ -58,9 +60,9 @@ public class Robot extends TimedRobot {
         //autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
-        if (autonomousCommand != null)
+        if (autoAling != null)
         {
-            autonomousCommand.schedule();
+            autoAling.schedule();
         }
     }
 
@@ -77,9 +79,9 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null)
+        if (autoAling != null)
         {
-            autonomousCommand.cancel();
+            autoAling.cancel();
         }
     }
 

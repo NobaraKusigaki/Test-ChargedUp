@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Teleop.DriveCommand;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.*;
+import frc.robot.commands.Auto.*;
 
 public class RobotContainer {
     private final Joystick joy = new Joystick(Constants.JOY_PORT);
@@ -18,6 +17,7 @@ public class RobotContainer {
     private final DriveSubsystem subDrive = new DriveSubsystem();
     private final ArmSubsystem subArm = new ArmSubsystem();
     private final IntakeSubsystem subIntake = new IntakeSubsystem();
+    private final AutoAling autoAling = new AutoAling(subDrive);
 
     public RobotContainer() {
         subDrive.setDefaultCommand(new DriveCommand(joy, subDrive));
@@ -32,5 +32,9 @@ public class RobotContainer {
        new Trigger(()-> systemController.getL2Axis() > 0.04)
        .whileTrue(Commands.run(()-> subArm.setDownAngular(-0.4)))
        .whileFalse(Commands.run(()-> subArm.stopAngMotors()));
+    }
+
+    public Command getAutonomousCommand() {
+        return autoAling;
     }
 }

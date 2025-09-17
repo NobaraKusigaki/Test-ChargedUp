@@ -1,31 +1,70 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+package frc.robot.commands;
 
-package frc.robot.commands.Auto;
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DriveSubsystem;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAling extends Command {
-  /** Creates a new AutoAling. */
-  public AutoAling() {
-    // Use addRequirements() here to declare subsystem dependencies.
+
+  NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+  private DriveSubsystem SubSys;
+
+  double tx, tv, ta, Rm, Lm;
+
+  public AutoAling(DriveSubsystem SubSys) {
+
+    this.SubSys = SubSys;
+    addRequirements(SubSys);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    limelight();
+    SmartDashboard();
+  }
 
-  // Called once the command ends or is interrupted.
+  public void limelight() {
+    tx = limelight.getEntry("tx").getDouble(0.0);
+    ta = limelight.getEntry("ta").getDouble(0.0);
+    tv = limelight.getEntry("tv").getDouble(0.0);
+
+    // Ajustes finos
+    double rot_percent = 0.01;     
+    double fwd_percent = 0.2;      
+    double targetArea = 5;  
+
+    if (tv == 0) { 
+
+      Rm = 0.25;
+      Lm = -0.28; 
+
+    } else {
+
+      double rot = rot_percent * tx; 
+      double forward = fwd_percent * (targetArea - ta);
+    
+      forward = Math.max(-0.6, Math.min(forward, 0.6));
+      rot = Math.max(-0.4, Math.min(rot, 0.4));
+    
+      Lm = forward + rot;
+      Rm = forward - rot;
+    }
+  }
+
+  public void SmartDashboard() {
+    SmartDashboard.putNumber("** - Tx", tx);
+    SmartDashboard.putNumber("** - Ta", ta);
+    SmartDashboard.putNumber("** - Tv", tv);
+  }
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
