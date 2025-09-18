@@ -1,8 +1,7 @@
-package frc.robot.commands;
+package frc.robot.commands.Auto;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
@@ -12,7 +11,7 @@ public class AutoAling extends Command {
   NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
   private DriveSubsystem SubSys;
 
-  double tx, tv, ta, Rm, Lm;
+  double tx, tv, ta, Rm, Lm, pose[];
 
   public AutoAling(DriveSubsystem SubSys) {
 
@@ -33,6 +32,7 @@ public class AutoAling extends Command {
     tx = limelight.getEntry("tx").getDouble(0.0);
     ta = limelight.getEntry("ta").getDouble(0.0);
     tv = limelight.getEntry("tv").getDouble(0.0);
+    pose = limelight.getEntry("botpose_wpired").getDoubleArray(new double[6]);
 
     // Ajustes finos
     double rot_percent = 0.01;     
@@ -61,6 +61,9 @@ public class AutoAling extends Command {
     SmartDashboard.putNumber("** - Tx", tx);
     SmartDashboard.putNumber("** - Ta", ta);
     SmartDashboard.putNumber("** - Tv", tv);
+    SmartDashboard.putNumber("** - PoseX", pose[0]);
+    SmartDashboard.putNumber("** - PoseY", pose[1]);
+    SmartDashboard.putNumber("** - PoseZ", pose[2]);
   }
   @Override
   public void end(boolean interrupted) {}

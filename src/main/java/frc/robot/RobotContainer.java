@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Auto.AutoAling;
 import frc.robot.commands.Teleop.DriveCommand;
 import frc.robot.subsystems.*;
-import frc.robot.commands.Auto.*;
 
 public class RobotContainer {
     private final Joystick joy = new Joystick(Constants.JOY_PORT);
