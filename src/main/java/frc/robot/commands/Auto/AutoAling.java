@@ -8,7 +8,7 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoAling extends Command {
 
-  NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+  NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight-front");
   private DriveSubsystem SubSys;
 
   double tx, tv, ta, Rm, Lm, pose[];
@@ -35,23 +35,23 @@ public class AutoAling extends Command {
     pose = limelight.getEntry("botpose_wpired").getDoubleArray(new double[6]);
 
     // Ajustes finos
-    double rot_percent = 0.01;     
-    double fwd_percent = 0.2;      
-    double targetArea = 5;  
+    double rot_percent = 0.01;
+    double fwd_percent = 0.2;
+    double targetArea = 5;
 
-    if (tv == 0) { 
+    if (tv == 0) {
 
       Rm = 0.25;
-      Lm = -0.28; 
+      Lm = -0.28;
 
     } else {
 
-      double rot = rot_percent * tx; 
+      double rot = rot_percent * tx;
       double forward = fwd_percent * (targetArea - ta);
-    
+
       forward = Math.max(-0.6, Math.min(forward, 0.6));
       rot = Math.max(-0.4, Math.min(rot, 0.4));
-    
+
       Lm = forward + rot;
       Rm = forward - rot;
     }
